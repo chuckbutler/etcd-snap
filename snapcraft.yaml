@@ -1,0 +1,32 @@
+name: etcd
+version: 3.0.15
+summary: Distributed key-value store
+description: |
+  Etcd provides a key-value store and is implemented for high availability,
+  using the RAFT algorithm to deal with failover within the etcd cluster.
+  Popular in the Docker community as a shared store of small but important
+  pieces of common data in an application.
+grade: devel
+confinement: devmode # use "strict" to enforce system access only via declared interfaces
+
+apps:
+  etcd:
+    command: bin/etcd
+    plugs:
+        - network
+    daemon: simple
+    restart-condition: on-abnormal
+  etcdctl:
+    command: bin/etcdctl
+    plugs:
+        - home
+parts:
+  etcd:
+    plugin: dump
+    source: https://github.com/coreos/etcd/releases/download/v3.0.15/etcd-v3.0.15-linux-amd64.tar.gz
+    organize:
+        etcd: bin/etcd
+        etcdctl: bin/etcdctl
+    snap:
+        - bin/etcd
+        - bin/etcdctl
